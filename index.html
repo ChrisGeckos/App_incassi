@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="it"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <meta name="theme-color" content="#14876f">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Incassi">
@@ -82,8 +82,11 @@ const tm=()=>{let v=num();while(s[i]==='*'||s[i]==='/'){const o=s[i++],r=num();i
 const ex=()=>{let v=tm();while(s[i]==='+'||s[i]==='-'){const o=s[i++],r=tm();v=o==='+'?v+r:v-r}return v};
 try{const v=ex();return i===s.length&&isFinite(v)?v:null}catch(e){return null}}
 
-function modal(h){$('#modal').innerHTML=`<div class="ov" onclick="if(event.target===this)closeM()"><div class="sh">${h}</div></div>`}
+function modal(h){$('#modal').innerHTML=`<div class="ov" onclick="if(event.target===this)closeM()"><div class="sh">${h}</div></div>`;kb()}
 const closeM=()=>{$('#modal').innerHTML=''};
+function kb(){const v=window.visualViewport,o=$('#modal .ov');if(!v||!o)return;o.style.paddingBottom=Math.max(0,innerHeight-v.height-v.offsetTop)+'px'}
+if(window.visualViewport){visualViewport.addEventListener('resize',kb);visualViewport.addEventListener('scroll',kb)}
+document.addEventListener('focusin',e=>{if(e.target.closest('#modal'))setTimeout(()=>{kb();e.target.scrollIntoView({block:'nearest'})},300)});
 function toast(t,undo){const e=$('#toast');e.innerHTML=`<span>${esc(t)}${undo?'<button id="u">Annulla</button>':''}</span>`;e.className='on';if(undo)$('#u').onclick=()=>{undo();e.className=''};clearTimeout(toast.t);toast.t=setTimeout(()=>e.className='',6000)}
 function sure(t,fn,ok='Elimina'){window.cb=fn;modal(`<h2>Conferma</h2><p>${esc(t)}</p><div class="two"><button class="btn" onclick="closeM()">Annulla</button><button class="btn out" onclick="closeM();cb()">${ok}</button></div>`)}
 async function copy(t){try{await navigator.clipboard.writeText(t);return true}catch(e){const x=$('#bx');if(x){x.select();try{return document.execCommand('copy')}catch(_){}}return false}}
