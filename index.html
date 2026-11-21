@@ -8,9 +8,9 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <style>
-:root{--bg:#f3f7f6;--card:#fff;--tx:#17302b;--mut:#5d7570;--pri:#14876f;--hd:#14876f;--in:#2e7d32;--out:#c62828;--bd:#d3dfdc;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1b18;--card:#172622;--tx:#e6f0ee;--mut:#9db5b0;--pri:#1f9d84;--hd:#0f5f50;--in:#66bb6a;--out:#ef6b6b;--bd:#2c4540;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0f1b18;--card:#172622;--tx:#e6f0ee;--mut:#9db5b0;--pri:#1f9d84;--hd:#0f5f50;--in:#66bb6a;--out:#ef6b6b;--bd:#2c4540;color-scheme:dark}
+:root{--bg:#f3f7f6;--card:#fff;--tx:#17302b;--mut:#5d7570;--pri:#14876f;--hd:#14876f;--in:#2e7d32;--out:#c62828;--bd:#d3dfdc;--yel:#e0a100;--gr:#00a343;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1b18;--card:#172622;--tx:#e6f0ee;--mut:#9db5b0;--pri:#1f9d84;--hd:#0f5f50;--in:#66bb6a;--out:#ef6b6b;--bd:#2c4540;--yel:#ffd54f;--gr:#00e676;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f1b18;--card:#172622;--tx:#e6f0ee;--mut:#9db5b0;--pri:#1f9d84;--hd:#0f5f50;--in:#66bb6a;--out:#ef6b6b;--bd:#2c4540;--yel:#ffd54f;--gr:#00e676;color-scheme:dark}
 html,body{height:100%;margin:0}
 body{background:var(--bg);color:var(--tx);font:16px system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 #app{height:100%;display:flex;flex-direction:column}
@@ -55,7 +55,7 @@ input.plain{border:0;background:none;padding:6px}
 #toast button{background:none;border:0;color:#8fe3cf;font:inherit;font-weight:700}
 .card{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}.card input{user-select:text;-webkit-user-select:text}
 .sw{display:flex;flex-wrap:wrap;gap:12px}.sw button{width:48px;height:48px;border-radius:50%;border:2px solid var(--bd)}.sw .none{width:auto;border-radius:24px;padding:0 16px;background:var(--card);color:var(--tx);font:inherit}
-.bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;background:var(--card);margin:-16px -16px 0;padding:12px 16px}.bar h2{flex:1;margin:0;font-size:18px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.bar .btn{padding:10px 14px}.sh input,.sh select{scroll-margin-top:72px}
+.bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:8px;background:var(--card);margin:-16px -16px 0;padding:12px 16px}.bar h2{flex:1;margin:0;font-size:18px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.bar .btn{padding:10px 14px}.sh{scroll-padding-top:88px}.ov.top{align-items:flex-start}.ov.top .sh{border-radius:0 0 18px 18px}.ov.top .bar{padding-top:calc(12px + env(safe-area-inset-top,0px))}.th{height:44px;border-radius:8px;border:1px solid var(--bd)}.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}.chip{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:20px;padding:8px 14px;font:inherit}.chip.on{background:var(--pri);color:#fff;border-color:var(--pri)}.chip.ev.on{background:var(--card);color:var(--tx);border:2px solid var(--c)}.chip.off{opacity:.45;text-decoration:line-through}.chip i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}.ic:disabled{opacity:.25}.lb{position:relative;overflow:hidden;flex:1;text-align:center}.lb input{position:absolute;inset:0;width:100%;height:100%;opacity:0;font-size:0;padding:0;border:0}#phw:empty{display:none}.sh input,.sh select,.sh textarea{border:1.5px solid color-mix(in srgb,var(--mut) 60%,transparent);border-radius:12px}input:focus,select:focus,textarea:focus{outline:none;border-color:var(--pri);box-shadow:none}.sh{scroll-padding-top:88px}#a{border-width:2px;padding:12px 14px}.ops button{border:1.5px solid color-mix(in srgb,var(--mut) 50%,transparent)}
 @media print{html,body,#app{height:auto}header,footer,.stack{display:none}main{overflow:visible}}
 </style></head><body>
 <div id="app"></div><div id="modal"></div><div id="toast"></div>
@@ -71,6 +71,8 @@ let S={events:[],cats:[],nid:1};
 try{const r=localStorage.getItem('incassi:v1');if(r)S=JSON.parse(r)}catch(e){}
 const save=()=>{try{localStorage.setItem('incassi:v1',JSON.stringify(S))}catch(e){}};
 const id=()=>S.nid++;
+function mig(){if(!S.gest||!S.gest.length){const g={id:id(),name:'Gestione 1'};S.gest=[g];S.g=g.id;S.events.sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id)}S.events.forEach(e=>{if(!S.gest.some(g=>g.id===e.g))e.g=S.gest[0].id});if(!S.gest.some(g=>g.id===S.g))S.g=S.gest[0].id}
+mig();
 let view={n:'list'};
 const cur=()=>S.events.find(e=>e.id===view.id);
 const catName=c=>(S.cats.find(x=>x.id===c)||{}).name||'';
@@ -83,34 +85,111 @@ const tm=()=>{let v=num();while(s[i]==='*'||s[i]==='/'){const o=s[i++],r=num();i
 const ex=()=>{let v=tm();while(s[i]==='+'||s[i]==='-'){const o=s[i++],r=tm();v=o==='+'?v+r:v-r}return v};
 try{const v=ex();return i===s.length&&isFinite(v)?v:null}catch(e){return null}}
 
-function modal(h){$('#modal').innerHTML=`<div class="ov" onclick="if(event.target===this)closeM()"><div class="sh">${h}</div></div>`;kb()}
+function modal(h,t){$('#modal').innerHTML=`<div class="ov${t?' top':''}" onclick="if(event.target===this)closeM()"><div class="sh">${h}</div></div>`;kb()}
 const closeM=()=>{$('#modal').innerHTML=''};
-function kb(){const v=window.visualViewport,o=$('#modal .ov');if(!v||!o)return;o.style.paddingBottom=Math.max(0,innerHeight-v.height-v.offsetTop)+'px'}
+function kb(){const v=window.visualViewport,o=$('#modal .ov');if(!v||!o)return;o.style.paddingBottom=Math.max(0,innerHeight-v.height-v.offsetTop)+'px';o.style.paddingTop=v.offsetTop+'px'}
 if(window.visualViewport){visualViewport.addEventListener('resize',kb);visualViewport.addEventListener('scroll',kb)}
-document.addEventListener('focusin',e=>{if(e.target.closest('#modal'))setTimeout(()=>{kb();e.target.scrollIntoView({block:'nearest'})},300)});
+document.addEventListener('focusin',e=>{if(e.target.closest('#modal'))setTimeout(()=>{kb();if(e.target.id!=='a')e.target.scrollIntoView({block:'nearest'})},300)});
 function toast(t,undo){const e=$('#toast');e.innerHTML=`<span>${esc(t)}${undo?'<button id="u">Annulla</button>':''}</span>`;e.className='on';if(undo)$('#u').onclick=()=>{undo();e.className=''};clearTimeout(toast.t);toast.t=setTimeout(()=>e.className='',6000)}
 function sure(t,fn,ok='Elimina'){window.cb=fn;modal(`<h2>Conferma</h2><p>${esc(t)}</p><div class="two"><button class="btn" onclick="closeM()">Annulla</button><button class="btn out" onclick="closeM();cb()">${ok}</button></div>`)}
 async function copy(t){try{await navigator.clipboard.writeText(t);return true}catch(e){const x=$('#bx');if(x){x.select();try{return document.execCommand('copy')}catch(_){}}return false}}
 function box(t,text){modal(`<h2>${esc(t)}</h2><textarea id="bx" readonly rows="7">${esc(text)}</textarea><div class="two"><button class="btn" onclick="closeM()">Chiudi</button><button class="btn pri" onclick="cp()">Copia</button></div>`)}
 async function cp(){toast(await copy($('#bx').value)?'Copiato':'Seleziona il testo e copialo a mano')}
 
-function render(){const a=$('#app');a.innerHTML={list:listH,ev:evH,sum:sumH,cat:catH}[view.n]()}
+function render(){const a=$('#app');a.innerHTML={list:listH3,ev:evH,sum:sumH2,cat:catH,gr:grH2}[view.n]()}
 const go=n=>{view.n=n;render()};
 const open_=i=>{view={n:'ev',id:i};render()};
 
 function listH(){const ev=[...S.events].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id);
 return `<header><img src="${ICON}" alt=""><h1>I miei eventi</h1><button class="ic" onclick="menu()">⋮</button></header><main>${ev.length?ev.map(e=>{const s=tot(e,'in')-tot(e,'out');return `<div class="card" data-lp="e,${e.id}" style="${tint(e.color,'--card')}" onclick="open_(${e.id})"><div><b>${esc(e.name)}</b><small>${fdate(e.date)}${e.closed?' · chiuso':''}</small></div><b style="color:var(--${s>=0?'in':'out'})">${eur(s)}</b><button class="ic" onclick="event.stopPropagation();evMenu(${e.id})">⋯</button></div>`}).join(''):'<p class="empty">Nessun evento.<br>Tocca “Nuovo evento” per iniziare.</p>'}</main><footer><button class="btn pri" style="width:100%" onclick="newEv()">+ Nuovo evento</button></footer>`}
 
-function menu(){modal(`<h2>Menu</h2><div class="stack" style="margin:0"><button class="btn" onclick="closeM();go('cat')">Categorie</button><button class="btn" onclick="box('Backup dati (copia e conserva questo testo)',JSON.stringify(S))">Backup dati</button><button class="btn" onclick="restore()">Ripristina backup</button></div>`)}
+function menu(){modal(`<h2>Menu</h2><div class="stack" style="margin:0"><button class="btn" onclick="closeM();go('cat')">Categorie</button><button class="btn" onclick="box('Backup dati (copia e conserva questo testo)',JSON.stringify(S))">Backup dati</button><button class="btn" onclick="restore()">Ripristina backup</button></div><small style="text-align:center">Versione 8</small>`)}
 function restore(){modal(`<h2>Ripristina backup</h2><small>Incolla qui il testo del backup. Sostituirà tutti i dati attuali.</small><textarea id="rj" rows="6"></textarea><div class="two"><button class="btn" onclick="closeM()">Annulla</button><button class="btn pri" onclick="doRestore()">Ripristina</button></div>`)}
-function doRestore(){try{const o=JSON.parse($('#rj').value);if(!Array.isArray(o.events)||!Array.isArray(o.cats))throw 0;S=o;S.nid=S.nid||1e6;save();closeM();view={n:'list'};render();toast('Backup ripristinato')}catch(e){toast('Testo di backup non valido')}}
+function doRestore(){try{const o=JSON.parse($('#rj').value);if(!Array.isArray(o.events)||!Array.isArray(o.cats))throw 0;S=o;S.nid=S.nid||1e6;mig();save();closeM();view={n:'list'};render();toast('Backup ripristinato')}catch(e){toast('Testo di backup non valido')}}
 
 function newEv(){modal(`<h2>Nuovo evento</h2><input id="en" placeholder="Nome evento"><input id="ed" type="date" value="${today()}"><div class="two"><button class="btn" onclick="closeM()">Annulla</button><button class="btn pri" onclick="addEv()">Crea</button></div>`);setTimeout(()=>$('#en').focus(),50)}
-function addEv(){const n=$('#en').value.trim();if(!n)return;const d=$('#ed').value||today();S.events.push({id:id(),name:n,date:new Date(d+'T12:00').toISOString(),closed:false,created:new Date().toISOString(),moves:[]});save();closeM();render()}
-function evMenu(i){const e=S.events.find(x=>x.id===i);modal(`<h2>${esc(e.name)}</h2><div class="stack" style="margin:0"><button class="btn" onclick="ren(${i})">Rinomina</button><button class="btn" onclick="colorEv(${i})">Colore di sfondo</button><button class="btn" onclick="imp(${i})">Importa da Excel</button><button class="btn" onclick="dup(${i})">Duplica (senza movimenti)</button><button class="btn out" onclick="sure('Eliminare l’evento e tutti i suoi movimenti?',()=>delEv(${i}))">Elimina evento</button></div>`)}
-function dup(i){const e=S.events.find(x=>x.id===i),n=new Date().toISOString();S.events.push({id:id(),name:e.name+' (copia)',date:n,closed:false,created:n,moves:[]});save();closeM();render()}
+function addEv(){const n=$('#en').value.trim();if(!n)return;const d=$('#ed').value||today();S.events.unshift({id:id(),g:S.g,name:n,date:new Date(d+'T12:00').toISOString(),closed:false,created:new Date().toISOString(),moves:[]});save();closeM();render()}
+function evMenu(i){const e=S.events.find(x=>x.id===i);modal(`<h2>${esc(e.name)}</h2><div class="stack" style="margin:0"><button class="btn" onclick="ren(${i})">Rinomina</button><button class="btn" onclick="colorEv(${i})">Colore di sfondo</button><button class="btn" onclick="evMove(${i})">Sposta in altra gestione</button><button class="btn" onclick="imp(${i})">Importa da Excel</button><button class="btn" onclick="dup(${i})">Duplica (senza movimenti)</button><button class="btn out" onclick="sure('Eliminare l’evento e tutti i suoi movimenti?',()=>delEv(${i}))">Elimina evento</button></div>`)}
+function dup(i){const e=S.events.find(x=>x.id===i),n=new Date().toISOString();S.events.unshift({id:id(),g:e.g,name:e.name+' (copia)',date:n,closed:false,created:n,moves:[]});save();closeM();render()}
 function delEv(i){S.events=S.events.filter(x=>x.id!==i);save();render()}
 const loc=s=>{const d=new Date(s);return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,19)};
+let ph;
+const idb=new Promise(r=>{try{const q=indexedDB.open('incassi-foto',1);q.onupgradeneeded=()=>q.result.createObjectStore('p');q.onsuccess=()=>r(q.result);q.onerror=()=>r(null)}catch(e){r(null)}});
+const ptx=async(m,f)=>{const d=await idb;if(!d)return;return new Promise(r=>{try{const q=f(d.transaction('p',m).objectStore('p'));q.onsuccess=()=>r(q.result);q.onerror=()=>r()}catch(e){r()}})};
+const LS={g:k=>{try{return localStorage.getItem('incassi:p'+k)}catch(e){return null}},s:(k,v)=>{try{localStorage.setItem('incassi:p'+k,v);return k}catch(e){}},d:k=>{try{localStorage.removeItem('incassi:p'+k)}catch(e){}}};
+const pget=async k=>(await ptx('readonly',s=>s.get(k)))||LS.g(k),pput=async(k,v)=>(await ptx('readwrite',s=>s.put(v,k)))??LS.s(k,v),pdel=async k=>{await ptx('readwrite',s=>s.delete(k));LS.d(k)};
+async function shrink(f){const M=1280,fin=(src,w,hh)=>{const k=Math.min(1,M/Math.max(w,hh)),c=document.createElement('canvas');c.width=Math.round(w*k);c.height=Math.round(hh*k);c.getContext('2d').drawImage(src,0,0,c.width,c.height);return c.toDataURL('image/jpeg',.72)};
+if(window.createImageBitmap){try{const b=await createImageBitmap(f,f.size>8e5?{resizeWidth:M,imageOrientation:'from-image'}:{imageOrientation:'from-image'});const r=fin(b,b.width,b.height);b.close&&b.close();return r}catch(x){}}
+return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>res(fin(im,im.width,im.height));im.onerror=()=>rej(new Error('formato non supportato'));im.src=fr.result};fr.onerror=()=>rej(new Error('lettura del file'));fr.readAsDataURL(f)})}
+async function pick(i){const f=i.files[0];i.value='';if(!f)return;toast('Elaboro la foto…');try{ph=await shrink(f);showPh();toast('Foto aggiunta')}catch(x){toast('Foto non letta: '+((x&&x.message)||'errore'))}}
+function showPh(){const w=$('#phw');if(w)w.innerHTML=ph?`<img class="th" src="${ph}" onclick="viewPh(ph)"><button class="ic" style="color:var(--tx)" onclick="ph='';showPh()">✕</button>`:''}
+function viewPh(s){const d=document.createElement('div');d.className='ov';d.style.cssText='z-index:8;align-items:center;justify-content:center;background:rgba(0,0,0,.92)';d.innerHTML=`<img src="${s}" style="max-width:100%;max-height:100%">`;d.onclick=()=>d.remove();document.body.appendChild(d)}
+async function vp(i){const s=await pget(i);if(s)viewPh(s)}
+const tc=(l,v,c)=>`<div><small>${l}</small><b style="color:var(--${c});font-weight:${c==='gr'?800:600}">${eur(v)}</b></div>`;
+const gev=()=>S.events.filter(e=>e.g===S.g),gname=()=>(S.gest.find(g=>g.id===S.g)||{}).name||'';
+let reord=0,GM='in',GF=0,GT=23,GX={},EM='in';
+const PAL=['#1e88e5','#fb8c00','#8e24aa','#00acc1','#d81b60','#6d4c41','#43a047','#fdd835','#e53935','#757575'],ecol=(e,k)=>e.color||PAL[k%PAL.length];
+const sv=(m,k)=>k==='net'?(m.t==='in'?m.a:-m.a):(m.t===k?m.a:0);
+const hk=t=>{const d=new Date(t);return new Date(d.getFullYear(),d.getMonth(),d.getDate(),d.getHours()).getTime()};
+const chips=(c,fn)=>`<div class="chips">${[['in','Incassi'],['out','Spese'],['net','Ricavo']].map(([k,l])=>`<button class="chip ${c===k?'on':''}" onclick="${fn}('${k}')">${l}</button>`).join('')}</div>`;
+const setGM=k=>{GM=k;render()},setEM=k=>{EM=k;render()},tgE=i=>{GX[i]=GX[i]===0?1:0;render()};
+
+function listH2(){const ev=gev(),I=ev.reduce((s,e)=>s+tot(e,'in'),0),O=ev.reduce((s,e)=>s+tot(e,'out'),0);
+return `<header><img src="${ICON}" alt=""><h1 onclick="gMenu()">${esc(gname())} ▾</h1><button class="ic" onclick="reord=!reord;render()">${reord?'✓':'⇅'}</button><button class="ic" onclick="go('gr')">📈</button><button class="ic" onclick="menu()">⋮</button></header><main>${ev.length?ev.map((e,k)=>{const s=tot(e,'in')-tot(e,'out');return `<div class="card" ${reord?'':`data-lp="e,${e.id}" onclick="open_(${e.id})"`} style="${tint(e.color,'--card')}"><div><b>${esc(e.name)}</b><small>${fdate(e.date)}${e.closed?' · chiuso':''}</small></div><b style="color:var(--${s>=0?'in':'out'})">${eur(s)}</b>${reord?`<button class="ic" ${k?'':'disabled'} onclick="mvEv(${e.id},-1)">▲</button><button class="ic" ${k<ev.length-1?'':'disabled'} onclick="mvEv(${e.id},1)">▼</button>`:`<button class="ic" onclick="event.stopPropagation();evMenu(${e.id})">⋯</button>`}</div>`}).join(''):'<p class="empty">Nessun evento.<br>Tocca “Nuovo evento” per iniziare.</p>'}</main><footer><button class="btn pri" style="width:100%" onclick="newEv()">+ Nuovo evento</button><div class="tots">${tc('Totale Ricevuto',I,'yel')}${tc('Totale Pagato',O,'out')}${tc('Ricavo',I-O,I-O>=0?'gr':'out')}</div></footer>`}
+function mvEv(i,d){const l=gev(),k=l.findIndex(e=>e.id===i),o=l[k+d];if(!o)return;const a=S.events.indexOf(l[k]),b=S.events.indexOf(o);[S.events[a],S.events[b]]=[S.events[b],S.events[a]];save();render()}
+
+function gMenu(){modal(`<h2>Gestioni</h2><div class="stack" style="margin:0">${S.gest.map(g=>`<button class="btn ${g.id===S.g?'pri':''}" onclick="setG(${g.id})">${esc(g.name)}${g.id===S.g?' ✓':''}</button>`).join('')}<button class="btn" onclick="gNew()">+ Nuova gestione</button><button class="btn" onclick="gRen()">Rinomina questa</button>${S.gest.length>1?`<button class="btn out" onclick="gDel()">Elimina questa</button>`:''}</div>`)}
+function setG(i){S.g=i;save();closeM();render()}
+function gAsk(t,v,fn){window.gfn=fn;modal(`<h2>${t}</h2><input id="gn" value="${esc(v)}" placeholder="Nome attività"><div class="two"><button class="btn" onclick="closeM()">Annulla</button><button class="btn pri" onclick="const n=$('#gn').value.trim();if(n){closeM();gfn(n)}">Salva</button></div>`);setTimeout(()=>$('#gn').select(),50)}
+const gNew=()=>gAsk('Nuova gestione','',n=>{const g={id:id(),name:n};S.gest.push(g);S.g=g.id;save();render()});
+const gRen=()=>gAsk('Rinomina gestione',gname(),n=>{S.gest.find(g=>g.id===S.g).name=n;save();render()});
+const gDel=()=>sure('Eliminare la gestione “'+gname()+'” con tutti i suoi eventi?',()=>{S.events=S.events.filter(e=>e.g!==S.g);S.gest=S.gest.filter(g=>g.id!==S.g);S.g=S.gest[0].id;save();render()});
+function evMove(i){modal(`<h2>Sposta in…</h2><div class="stack" style="margin:0">${S.gest.filter(g=>g.id!==S.g).map(g=>`<button class="btn" onclick="S.events.find(e=>e.id===${i}).g=${g.id};save();closeM();render()">${esc(g.name)}</button>`).join('')||'<p>Crea prima un’altra gestione.</p>'}</div>`)}
+
+function svgChart(L,B,line){const n=L.length;if(!n)return'';
+const sm=(b,f)=>b.filter(f).reduce((a,s)=>a+s.v,0),mx=Math.max(0,...B.map(b=>sm(b,s=>s.v>0)),...(line||[])),mn=Math.min(0,...B.map(b=>sm(b,s=>s.v<0)),...(line||[]));
+if(mx===mn)return'<p class="empty" style="margin:30px 0">Nessun dato per la selezione.</p>';
+const w=Math.max(340,n*30+50),h=220,pl=46,pt=12,pb=40,bw=(w-pl-8)/n,y=v=>pt+(h-pt-pb)*(mx-v)/(mx-mn),f=v=>Math.round(v).toLocaleString('it-IT');
+let s=`<svg viewBox="0 0 ${w} ${h}" style="min-width:100%;width:${w}px;font-size:11px">`;
+[...new Set([mx,mn,0])].forEach(v=>{s+=`<line x1="${pl}" x2="${w-4}" y1="${y(v)}" y2="${y(v)}" style="stroke:var(--bd)"/><text x="${pl-4}" y="${y(v)+4}" text-anchor="end" style="fill:var(--mut)">${f(v)}</text>`});
+B.forEach((b,i)=>{let p=y(0),q=p;const x=pl+i*bw+bw*.15;b.forEach(g=>{const t=Math.abs(y(g.v)-y(0));if(g.v>0){p-=t;s+=`<rect x="${x}" y="${p}" width="${bw*.7}" height="${t}" style="fill:${g.c}"/>`}else{s+=`<rect x="${x}" y="${q}" width="${bw*.7}" height="${t}" style="fill:${g.c}"/>`;q+=t}})});
+if(line)s+=`<polyline fill="none" style="stroke:var(--tx)" stroke-width="2" points="${line.map((v,i)=>`${pl+i*bw+bw/2},${y(v)}`).join(' ')}"/>`+line.map((v,i)=>`<circle cx="${pl+i*bw+bw/2}" cy="${y(v)}" r="3" style="fill:var(--tx)"/>`).join('');
+L.forEach((l,i)=>{const x=pl+i*bw+bw/2;s+=`<text x="${x}" y="${h-pb+14}" text-anchor="middle" style="fill:var(--mut)">${l.l}</text>`+(l.d?`<text x="${x}" y="${h-pb+26}" text-anchor="middle" font-size="9" style="fill:var(--mut)">${l.d}</text>`:'')});
+return `<div style="overflow-x:auto">${s}</svg></div>`}
+
+function evChart(e,k){const ks=e.moves.map(m=>hk(m.ts));if(!ks.length)return'<p class="empty" style="margin:30px 0">Nessun movimento.</p>';
+const a=Math.min(...ks),z=Math.min(Math.max(...ks),a+199*36e5),L=[],B=[],line=[];let cum=0,pd='';
+for(let t=a;t<=z;t+=36e5){const dd=fdate(t).slice(0,5),v=e.moves.reduce((s,m)=>hk(m.ts)===t?s+sv(m,k):s,0);cum+=v;L.push({l:String(new Date(t).getHours()).padStart(2,'0'),d:dd!==pd?dd:''});pd=dd;B.push(v?[{v,c:k==='net'?(v>0?'var(--gr)':'var(--out)'):k==='in'?'var(--yel)':'var(--out)'}]:[]);line.push(cum)}
+return svgChart(L,B,line)}
+const chartSec=()=>`<h3>Andamento orario</h3>${chips(EM,'setEM')}${evChart(cur(),EM)}<small>Barre: ${EM==='in'?'incassi':EM==='out'?'spese':'ricavo'} per ora. Linea: andamento cumulato.</small>`;
+const sumH2=()=>sumH().replace('<div class="stack">',chartSec()+'<div class="stack">');
+const totBar=l=>{const i=l.reduce((a,e)=>a+tot(e,'in'),0),o=l.reduce((a,e)=>a+tot(e,'out'),0),r=i-o,c=(t,v,k)=>`<div><small>${t}</small><b style="color:var(--${k});font-weight:${k==='gr'?800:600}">${eur(v)}</b></div>`;return `<div class="tots" style="margin:0 0 8px">${c('Totale Ricevuto',i,'yel')}${c('Totale Pagato',o,'out')}${c('Ricavo',r,r>=0?'gr':'out')}</div>`};
+const listH3=()=>listH2().replace('<footer>','<footer>'+totBar(gev()));
+let GV='h';
+const hr=m=>new Date(m.ts).getHours(),vmc=k=>k==='in'?'var(--yel)':k==='out'?'var(--out)':'var(--gr)';
+function lnChart(L,R,rot){const n=L.length;if(!n)return'<p class="empty" style="margin:30px 0">Seleziona almeno un evento.</p>';
+const all=R.flatMap(r=>r.v),mx=Math.max(0,...all),mn=Math.min(0,...all);
+if(mx===mn)return'<p class="empty" style="margin:30px 0">Nessun dato per la selezione.</p>';
+const w=Math.max(340,n*(rot?60:34)+60),h=rot?280:230,pl=48,pt=14,pb=rot?96:34,x=i=>n>1?pl+12+i*(w-pl-26)/(n-1):(pl+w)/2,y=v=>pt+(h-pt-pb)*(mx-v)/(mx-mn),f=v=>Math.round(v).toLocaleString('it-IT');
+let s=`<svg viewBox="0 0 ${w} ${h}" style="min-width:100%;width:${w}px;font-size:11px">`;
+[...new Set([mx,mn,0])].forEach(v=>{s+=`<line x1="${pl}" x2="${w-4}" y1="${y(v)}" y2="${y(v)}" style="stroke:var(--bd)"/><text x="${pl-4}" y="${y(v)+4}" text-anchor="end" style="fill:var(--mut)">${f(v)}</text>`});
+R.forEach(r=>{if(n>1)s+=`<polyline fill="none" stroke-linejoin="round" stroke-width="${r.w||2.5}" style="stroke:${r.c}" points="${r.v.map((v,i)=>x(i)+','+y(v)).join(' ')}"/>`;s+=r.v.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="3.5" style="fill:${r.dc?r.dc[i]:r.c}"/>`).join('')});
+L.forEach((l,i)=>{const t=esc(l.length>14?l.slice(0,13)+'…':l);s+=rot?`<text transform="translate(${x(i)+4},${h-pb+14}) rotate(-35)" text-anchor="end" style="fill:var(--mut)">${t}</text>`:`<text x="${x(i)}" y="${h-pb+16}" text-anchor="middle" style="fill:var(--mut)">${t}</text>`});
+return `<div style="overflow-x:auto">${s}</svg></div>`}
+function grH2(){const evs=gev().reverse(),sel=evs.filter(e=>GX[e.id]!==0),ok=m=>hr(m)>=GF&&hr(m)<=GT;let L,R;
+if(GV==='h'){L=[];for(let h=GF;h<=GT;h++)L.push(String(h).padStart(2,'0'));
+R=sel.map(e=>({c:ecol(e,evs.indexOf(e)),v:L.map((_,i)=>e.moves.reduce((s,m)=>hr(m)===GF+i?s+sv(m,GM):s,0))}));
+if(R.length>1)R.push({c:'var(--tx)',w:4,v:L.map((_,i)=>R.reduce((s,r)=>s+r.v[i],0))})}
+else{L=sel.map(e=>e.name);R=[{c:vmc(GM),v:sel.map(e=>e.moves.reduce((s,m)=>ok(m)?s+sv(m,GM):s,0)),dc:sel.map(e=>ecol(e,evs.indexOf(e)))}]}
+const T=sel.reduce((a,e)=>a+e.moves.reduce((s,m)=>ok(m)?s+sv(m,GM):s,0),0),ho=v=>[...Array(24)].map((_,h)=>`<option value="${h}" ${h===v?'selected':''}>${String(h).padStart(2,'0')}:00</option>`).join('');
+return `<header><button class="ic" onclick="go('list')">‹</button><h1>Grafici · ${esc(gname())}</h1></header><main><div class="chips"><button class="chip ${GV==='h'?'on':''}" onclick="GV='h';render()">Per orario</button><button class="chip ${GV==='e'?'on':''}" onclick="GV='e';render()">Per evento</button></div>${chips(GM,'setGM')}<div class="row" style="margin:10px 0"><small>Dalle</small><select style="width:auto;flex:1" onchange="GF=+this.value;if(GT<GF)GT=GF;render()">${ho(GF)}</select><small>alle</small><select style="width:auto;flex:1" onchange="GT=+this.value;if(GF>GT)GF=GT;render()">${ho(GT)}</select></div>${lnChart(L,R,GV==='e')}<div class="line big"><span>Totale selezione</span><b>${eur(T)}</b></div><h3>Eventi nel grafico</h3><div class="chips">${evs.length?evs.map((e,k)=>`<button class="chip ev ${GX[e.id]===0?'off':'on'}" style="--c:${ecol(e,k)}" onclick="tgE(${e.id})"><i style="background:${ecol(e,k)}"></i>${esc(e.name)}</button>`).join(''):'<small>Nessun evento in questa gestione.</small>'}</div><small>${GV==='h'?'Una linea per evento, più la linea scura del totale. ':'Ogni punto è un evento, nel suo colore. '}Tocca un evento per includerlo o escluderlo.</small></main>`}
+
+function grH(){const evs=gev(),sel=evs.filter(e=>GX[e.id]!==0),L=[],B=[];
+for(let h=GF;h<=GT;h++){L.push({l:String(h).padStart(2,'0')});B.push([])}
+if(GM==='net'){const t=L.map(()=>0);sel.forEach(e=>e.moves.forEach(m=>{const h=new Date(m.ts).getHours();if(h>=GF&&h<=GT)t[h-GF]+=sv(m,'net')}));t.forEach((v,i)=>{if(v)B[i].push({v,c:v>0?'var(--gr)':'var(--out)'})})}
+else sel.forEach(e=>{const col=ecol(e,evs.indexOf(e));e.moves.forEach(m=>{const v=sv(m,GM),h=new Date(m.ts).getHours();if(v&&h>=GF&&h<=GT){const b=B[h-GF],s=b.find(x=>x.e===e.id);s?s.v+=v:b.push({v,c:col,e:e.id})}})});
+const T=B.reduce((a,b)=>a+b.reduce((x,s)=>x+s.v,0),0),ho=v=>[...Array(24)].map((_,h)=>`<option value="${h}" ${h===v?'selected':''}>${String(h).padStart(2,'0')}:00</option>`).join('');
+return `<header><button class="ic" onclick="go('list')">‹</button><h1>Grafici · ${esc(gname())}</h1></header><main>${chips(GM,'setGM')}<div class="row" style="margin:10px 0"><small>Dalle</small><select style="width:auto;flex:1" onchange="GF=+this.value;if(GT<GF)GT=GF;render()">${ho(GF)}</select><small>alle</small><select style="width:auto;flex:1" onchange="GT=+this.value;if(GF>GT)GF=GT;render()">${ho(GT)}</select></div>${svgChart(L,B)}<div class="line big"><span>Totale selezione</span><b>${eur(T)}</b></div><h3>Eventi nel grafico</h3><div class="chips">${evs.length?evs.map((e,k)=>`<button class="chip ev ${GX[e.id]===0?'off':'on'}" style="--c:${ecol(e,k)}" onclick="tgE(${e.id})"><i style="background:${ecol(e,k)}"></i>${esc(e.name)}</button>`).join(''):'<small>Nessun evento in questa gestione.</small>'}</div><small>Tocca un evento per includerlo o escluderlo dal grafico. Ogni colore è un evento (il colore di sfondo scelto, altrimenti automatico).</small></main>`}
 const COL=['#e53935','#fb8c00','#fdd835','#43a047','#00acc1','#1e88e5','#8e24aa','#d81b60','#6d4c41','#757575'];
 const tint=(c,v)=>c?`background:color-mix(in srgb,${c} 22%,var(${v}))`:'';
 function colorEv(i){modal(`<h2>Colore di sfondo</h2><div class="sw">${COL.map(c=>`<button style="background:${c}" onclick="setCol(${i},'${c}')"></button>`).join('')}<button class="none" onclick="setCol(${i},'')">Nessuno</button></div>`)}
@@ -142,13 +221,13 @@ save();closeM();render();toast(n+' voci importate')}catch(x){toast('File non leg
 function evH(){const e=cur(),dis=e.closed?'disabled':'';
 const ms=[...e.moves].sort((a,b)=>b.ts.localeCompare(a.ts)||b.id-a.id);let b=0;const run={};
 [...e.moves].sort((a,b)=>a.ts.localeCompare(b.ts)||a.id-b.id).forEach(m=>{b+=m.t==='in'?m.a:-m.a;run[m.id]=b});
-const i=tot(e,'in'),o=tot(e,'out'),r=i-o,cell=(l,v,c)=>`<div><small>${l}</small><b style="color:var(--${c})">${eur(v)}</b></div>`;
-return `<header><button class="ic" onclick="go('list')">‹</button><h1 onclick="ren(${e.id})">${esc(e.name)} ✎</h1><button class="ic" onclick="go('sum')">📊</button><button class="ic" onclick="toggle()">${e.closed?'🔒':'🔓'}</button></header><main style="${tint(e.color,'--bg')}">${ms.length?ms.map(m=>`<div class="card" ${e.closed?'':`data-lp="m,${m.id}" onclick="mov('${m.t}',${m.id})"`}><div><b>${esc(m.d)}</b><small>${catName(m.c)?esc(catName(m.c))+' · ':''}${fmt(m.ts)}</small></div><div class="r"><b style="color:var(--${m.t})">${eur(m.a)}</b><small>Bilancio ${eur(run[m.id])}</small></div></div>`).join(''):'<p class="empty">Nessun movimento.<br>Usa i pulsanti in basso.</p>'}</main><footer><div class="two"><button class="btn in" ${dis} onclick="mov('in')">Hai Ricevuto</button><button class="btn out" ${dis} onclick="mov('out')">Hai Pagato</button></div><div class="tots">${cell('Totale Ricevuto',i,'in')}${cell('Totale Pagato',o,'out')}${cell('Ricavo',r,r>=0?'in':'out')}</div></footer>`}
+const i=tot(e,'in'),o=tot(e,'out'),r=i-o,cell=(l,v,c)=>`<div><small>${l}</small><b style="color:var(--${c});font-weight:${c==='gr'?800:600}">${eur(v)}</b></div>`;
+return `<header><button class="ic" onclick="go('list')">‹</button><h1 onclick="ren(${e.id})">${esc(e.name)} ✎</h1><button class="ic" onclick="go('sum')">📊</button><button class="ic" onclick="toggle()">${e.closed?'🔒':'🔓'}</button></header><main style="${tint(e.color,'--bg')}">${ms.length?ms.map(m=>`<div class="card" ${e.closed?'':`data-lp="m,${m.id}" onclick="mov('${m.t}',${m.id})"`}><div><b>${esc(m.d)}</b><small>${catName(m.c)?esc(catName(m.c))+' · ':''}${fmt(m.ts)}</small></div>${m.f?`<button class="ic" onclick="event.stopPropagation();vp(${m.id})">📷</button>`:''}<div class="r"><b style="color:var(--${m.t})">${eur(m.a)}</b><small>Bilancio ${eur(run[m.id])}</small></div></div>`).join(''):'<p class="empty">Nessun movimento.<br>Usa i pulsanti in basso.</p>'}</main><footer><div class="two"><button class="btn in" ${dis} onclick="mov('in')">Hai Ricevuto</button><button class="btn out" ${dis} onclick="mov('out')">Hai Pagato</button></div><div class="tots">${cell('Totale Ricevuto',i,'yel')}${cell('Totale Pagato',o,'out')}${cell('Ricavo',r,r>=0?'gr':'out')}</div></footer>`}
 function toggle(){const e=cur();e.closed=!e.closed;save();view.n=e.closed?'sum':'ev';render()}
 
 const catOpts=s=>`<option value="">Nessuna categoria</option>`+S.cats.map(c=>`<option value="${c.id}" ${c.id===s?'selected':''}>${esc(c.name)}</option>`).join('');
 function mov(t,mid){const e=cur(),m=mid?e.moves.find(x=>x.id===mid):null;
-modal(`<div class="bar"><button class="btn" onclick="closeM()">Annulla</button><h2 id="pv" data-t="${m?'Modifica voce':t==='in'?'Hai ricevuto':'Hai pagato'}" style="color:var(--${t})">${m?'Modifica voce':t==='in'?'Hai ricevuto':'Hai pagato'}</h2><button class="btn ${t}" onclick="saveMov('${t}',${mid||0})">Salva</button></div><input id="a" inputmode="decimal" autocomplete="off" placeholder="Valore € (anche un calcolo)" value="${m?String(m.a).replace('.',','):''}" oninput="pv()"><div class="ops">${['+','−','×','÷','(',')'].map(o=>`<button onclick="ins('${o}')">${o}</button>`).join('')}<button onclick="bk()">⌫</button><button class="eq" onclick="eq()">=</button></div><button class="btn" onclick="$('#dt').hidden=!$('#dt').hidden">🕒 Data e ora</button><input id="dt" type="datetime-local" step="1" hidden value="${loc(m?m.ts:new Date())}"><input id="d" placeholder="Descrizione" value="${m?esc(m.d):''}"><div class="row"><select id="c">${catOpts(m&&m.c)}</select><button class="ic" style="color:var(--tx)" onclick="$('#nc').hidden=false;$('#ncn').focus()">＋</button></div><div class="row" id="nc" hidden><input id="ncn" placeholder="Nome nuova categoria"><button class="btn pri" onclick="saveCat()">Aggiungi</button></div>${m?`<button class="btn out" onclick="delMov(${m.id})">Elimina</button>`:''}`);setTimeout(()=>$('#a').focus(),50)}
+modal(`<div class="bar"><button class="btn" onclick="closeM()">Annulla</button><h2 id="pv" data-t="${m?'Modifica voce':t==='in'?'Hai ricevuto':'Hai pagato'}" style="color:var(--${t})">${m?'Modifica voce':t==='in'?'Hai ricevuto':'Hai pagato'}</h2><button class="btn ${t}" onclick="saveMov('${t}',${mid||0})">Salva</button></div><input id="a" inputmode="decimal" autocomplete="off" placeholder="Valore € (anche un calcolo)" value="${m?String(m.a).replace('.',','):''}" oninput="pv()"><div class="ops">${['+','−','×','÷','(',')'].map(o=>`<button onclick="ins('${o}')">${o}</button>`).join('')}<button onclick="bk()">⌫</button><button class="eq" onclick="eq()">=</button></div><button class="btn" onclick="$('#dt').hidden=!$('#dt').hidden">🕒 Data e ora</button><input id="dt" type="datetime-local" step="1" hidden value="${loc(m?m.ts:new Date())}"><input id="d" placeholder="Descrizione" value="${m?esc(m.d):''}"><div class="row"><select id="c">${catOpts(m&&m.c)}</select><button class="ic" style="color:var(--tx)" onclick="$('#nc').hidden=false;$('#ncn').focus()">＋</button></div><div class="row" id="nc" hidden><input id="ncn" placeholder="Nome nuova categoria"><button class="btn pri" onclick="saveCat()">Aggiungi</button></div><div class="row"><label class="btn lb">📷 Scatta foto<input type="file" accept="image/*" capture="environment" onmousedown="event.preventDefault()" onchange="pick(this)"></label><label class="btn lb">🖼 Galleria<input type="file" accept="image/*" onmousedown="event.preventDefault()" onchange="pick(this)"></label></div><div id="phw" class="row"></div>${m?`<button class="btn out" onclick="delMov(${m.id})">Elimina</button>`:''}`);ph=undefined;if(m&&m.f)pget(m.id).then(v=>{if(v&&ph===undefined){ph=v;showPh()}});setTimeout(()=>$('#a').focus(),50)}
 function pv(){const t=$('#a').value,el=$('#pv');if(!/[+\-−×x*÷\/:()]/.test(t)){el.textContent=el.dataset.t;el.className='';return}const v=calc(t);el.textContent=v===null?'Calcolo non valido':'= '+eur(v);el.className=v===null?'bad':''}
 function ins(s){const a=$('#a'),p=a.selectionStart??a.value.length,q=a.selectionEnd??p;a.setRangeText(s,p,q,'end');a.focus();pv()}
 function bk(){const a=$('#a');let p=a.selectionStart,q=a.selectionEnd;if(p===q){if(!p)return;p--}a.setRangeText('',p,q,'end');a.focus();pv()}
@@ -157,7 +236,9 @@ function saveCat(){const n=$('#ncn').value.trim();if(!n)return;let c=S.cats.find
 function saveMov(t,mid){const v=calc($('#a').value);if(v===null||v<=0){$('#pv').textContent='Inserisci un importo valido';$('#pv').className='bad';return}
 const e=cur(),a=Math.round(v*100)/100,d=$('#d').value.trim()||(t==='in'?'Ricevuto':'Pagato'),c=+$('#c').value||null;
 const dt=$('#dt'),mm=mid?e.moves.find(x=>x.id===mid):null,ts=!dt.hidden&&dt.value?new Date(dt.value).toISOString():mm?mm.ts:new Date().toISOString();
-if(mm)Object.assign(mm,{a,d,c,ts});else e.moves.push({id:id(),t,a,d,c,ts});
+let mv=mm;if(mm)Object.assign(mm,{a,d,c,ts});else{mv={id:id(),t,a,d,c,ts};e.moves.push(mv)}
+if(ph)pput(mv.id,ph).then(k=>{if(k===undefined)toast('Foto non salvata');else{mv.f=1;save();render()}});
+else if(ph===''&&mv.f){delete mv.f;pdel(mv.id)}
 save();closeM();render()}
 function delMov(mid){const e=cur(),i=e.moves.findIndex(x=>x.id===mid),m=e.moves.splice(i,1)[0];save();closeM();render();toast('Voce eliminata',()=>{e.moves.push(m);save();render()})}
 
