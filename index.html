@@ -142,7 +142,7 @@ async function lkp(k){const p=pinGet();if(!p)return;if(pinWait()){drawLock('Trop
 if(k==='⌫')lk=lk.slice(0,-1);else if(lk.length<p.n)lk+=k;drawLock();
 if(lk.length===p.n){const v=lk;lk='';if(await hp(v,p.s)===p.h){try{localStorage.removeItem('incassi:pa')}catch(e){}$('#lock').style.display='none';window.lcb&&window.lcb()}else{pinFail();drawLock(pinWait()?'Troppi tentativi: riprova tra '+pinWait()+' s':'PIN errato')}}}
 document.addEventListener('visibilitychange',()=>{if(document.hidden)hid=Date.now();else if(pinOn()&&hid&&Date.now()-hid>6e4)showLock()});
-function start(){thApply();if(history.state&&history.state.g)hasG=1;if(pinOn())showLock(render);else render()}
+function start(){thApply();A=stN();if(pinOn())showLock(render);else render()}
 function pinMenu(){const on=pinOn();modal(`<h2>Blocco con PIN</h2><small>${on?'Il PIN è attivo: viene chiesto all’apertura e dopo un minuto in cui l’app resta in secondo piano.':'Proteggi l’app con un PIN di 4–6 cifre, chiesto all’apertura.'}</small><div class="stack" style="margin:0">${on?`<button class="btn" onclick="pinSet()">Cambia PIN</button><button class="btn out" onclick="pinOff()">Disattiva PIN</button>`:`<button class="btn pri" onclick="pinSet()">Attiva PIN</button>`}<button class="btn" onclick="closeM()">Chiudi</button></div>`)}
 function pinSet(){const on=pinOn(),f=(id,t)=>`<input id="${id}" type="password" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="${t}">`;modal(`<h2>${on?'Cambia PIN':'Attiva PIN'}</h2>${on?f('p0','PIN attuale'):''}${f('p1','Nuovo PIN (4–6 cifre)')}${f('p2','Ripeti il nuovo PIN')}<div id="pe" class="bad"></div><div class="two"><button class="btn" onclick="closeM()">Annulla</button><button class="btn pri" onclick="pinSave()">Salva</button></div>`)}
 async function pinSave(){const e=m=>{$('#pe').textContent=m},a=$('#p1').value,b=$('#p2').value;
@@ -151,16 +151,20 @@ if(!/^\d{4,6}$/.test(a))return e('Il PIN deve avere da 4 a 6 cifre');if(a!==b)re
 const s=Math.random().toString(36).slice(2);try{localStorage.setItem('incassi:pin',JSON.stringify({s,n:a.length,h:await hp(a,s)}))}catch(x){return e('Impossibile salvare il PIN su questo dispositivo')}closeM();toast('PIN attivato')}
 function pinOff(){modal(`<h2>Disattiva PIN</h2><input id="p0" type="password" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="Inserisci il PIN attuale"><div id="pe" class="bad"></div><div class="two"><button class="btn" onclick="closeM()">Annulla</button><button class="btn out" onclick="pinDel()">Disattiva</button></div>`)}
 async function pinDel(){if(!(await pinCheck($('#p0').value)))return void($('#pe').textContent='PIN errato');try{localStorage.removeItem('incassi:pin')}catch(e){}closeM();toast('PIN disattivato')}
-let hasG=0,busy=0,PV=null;
+let A=0,busy=0,sc=0,PV=null;
 const par=v=>v.n==='list'?null:v.n==='sum'?{n:'ev',id:v.id}:{n:'list'};
+const dep=v=>v.n==='list'?0:v.n==='sum'?2:1;
 const lockOn=()=>{const d=document.querySelector('#lock');return !!d&&d.style.display==='flex'};
-const need=()=>!!$('#modal').innerHTML||!!PV||view.n!=='list';
-function sync(){if(busy)return;const n=need();
-if(n&&!hasG){try{history.pushState({g:1},'');hasG=1}catch(e){}}
-else if(!n&&hasG){busy=1;hasG=0;setTimeout(()=>{busy=0},800);try{history.back()}catch(e){busy=0}}}
-window.addEventListener('popstate',()=>{if(busy){busy=0;sync();return}
-hasG=0;if(lockOn()){sync();return}
-if(PV){PV.remove();PV=null}else if($('#modal').innerHTML)$('#modal').innerHTML='';else{const p=par(view);if(p){view=p;render();return}}
+const need=()=>dep(view)+($('#modal').innerHTML?1:0)+(PV?1:0);
+const stN=()=>(history.state&&history.state.g)||0;
+// Una voce di cronologia per ogni "livello" aperto (evento, riepilogo, finestra, foto):
+// le voci si aggiungono solo quando l'utente tocca, e il tasto indietro ne toglie una alla volta.
+function sync(){if(sc)return;sc=1;setTimeout(()=>{sc=0;if(busy)return;const D=need();
+if(A<D){while(A<D){try{history.pushState({g:A+1},'')}catch(e){A=D;break}A++}}
+else if(A>D){const k=A-D;busy=1;A=D;setTimeout(()=>{busy=0},800);try{history.go(-k)}catch(e){busy=0}}},0)}
+window.addEventListener('popstate',()=>{if(busy){busy=0;A=stN();sync();return}
+A=stN();
+if(!lockOn()){if(PV){PV.remove();PV=null}else if($('#modal').innerHTML)$('#modal').innerHTML='';else{const p=par(view);if(p){view=p;render();return}}}
 sync()});
 const THS={auto:'Automatico',light:'Chiaro',dark:'Scuro'},thGet=()=>{try{return localStorage.getItem('incassi:theme')||'auto'}catch(e){return 'auto'}};
 function thApply(){const t=thGet(),r=document.documentElement;if(t==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',t)}
