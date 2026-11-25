@@ -74,7 +74,7 @@ header,.fh{background:linear-gradient(120deg,var(--hd),var(--hd2))}
 .dtf .ar{background:none;border:0;color:var(--tx);font-size:24px;padding:4px 6px}.dtf .ci{font-size:18px}
 .dtl{position:relative;flex:1;text-align:center;font-size:16px;line-height:52px;white-space:nowrap}.dtl input{position:absolute;inset:0;width:100%;height:100%;opacity:0;font-size:0;padding:0;border:0}
 .pg .ops .eq{background:var(--tc);border-color:var(--tc)}.pg #a:focus{border-color:var(--tc);box-shadow:0 0 0 3px color-mix(in srgb,var(--tc) 28%,transparent)}.ck{font-size:24px;margin-right:10px;color:var(--pri);line-height:1}
-.yr{display:inline-block;background:var(--pri);color:#fff;border-radius:10px;padding:1px 9px;font-size:.8em;font-weight:700;margin-left:4px;vertical-align:middle;line-height:1.5}header .yr{background:#fff;color:var(--hd)}
+.yr{display:inline-block;background:var(--pri);color:#fff;border-radius:10px;padding:1px 9px;font-size:.8em;font-weight:700;line-height:1.4}.fl{display:inline-flex;align-items:center;gap:6px}header .yr{background:#fff;color:var(--hd)}
 #rep{display:none}
 @media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}html,body{background:#fff!important;height:auto!important}#app,#modal,#toast,#tip,#lock{display:none!important}
 #rep{display:block;color:#000;background:#fff;font:12px/1.4 Arial,Helvetica,sans-serif}#rep .rh{display:flex;align-items:center;gap:12px;border-bottom:3px solid #14876f;padding-bottom:8px;margin-bottom:12px}#rep .rh img{width:48px;height:48px;border-radius:10px}#rep h1{margin:0;font-size:20px;color:#14876f;white-space:normal}#rep h2{font-size:14px;margin:18px 0 6px;color:#14876f}#rep h3{font-size:13px;margin:14px 0 4px}#rep h3 small{display:inline;color:#666;font-weight:400}#rep .pb{break-before:page}
@@ -288,7 +288,7 @@ function foRen(fid){const f=S.fld.find(x=>x.id===fid);gAsk('Rinomina rendiconto'
 function foDel(fid){const f=S.fld.find(x=>x.id===fid);sure('Eliminare il rendiconto “'+f.name+'”? Gli eventi tornano nella lista principale.',()=>{S.events.forEach(e=>{if(e.f===fid)delete e.f});S.fld=S.fld.filter(x=>x.id!==fid);save();if(view.n==='fo')view={n:'list'};render()})}
 function xlsxFo(fid){const f=S.fld.find(x=>x.id===fid),l=S.events.filter(e=>e.f===fid);if(!l.length){closeM();return toast('Nessun evento nel rendiconto')}xlsxGest(l,'Rendiconto_'+slug(f.name))}
 // ===== anno del rendiconto sempre visibile =====
-const fname=f=>String(f.name).replace(new RegExp('\\s*'+f.year+'$'),'')||String(f.name),flab=f=>esc(fname(f))+' <span class="yr">'+f.year+'</span>';
+const fname=f=>String(f.name).replace(new RegExp('\\s*'+f.year+'$'),'')||String(f.name),flab=f=>'<span class="fl">'+esc(fname(f))+'<span class="yr">'+f.year+'</span></span>';
 function foYear(fid){const f=S.fld.find(x=>x.id===fid);gAsk('Anno del rendiconto',String(f.year),n=>{const y=+n;if(!(y>=1990&&y<=2100))return toast('Anno non valido');if(f.name==='Rendiconto '+f.year)f.name='Rendiconto '+y;f.year=y;save();render()})}
 function foMenu(fid){const f=S.fld.find(x=>x.id===fid);modal(`<h2>${flab(f)}</h2><div class="stack" style="margin:0"><button class="btn" onclick="foRen(${fid})">Rinomina</button><button class="btn" onclick="foYear(${fid})">Cambia anno</button><button class="btn" onclick="xlsxFo(${fid})">Esporta in Excel</button><button class="btn" onclick="pdfFo(${fid})">Esporta in PDF</button><button class="btn out" onclick="foDel(${fid})">Elimina rendiconto</button></div><small>Eliminando il rendiconto gli eventi non vengono cancellati: tornano nella lista principale.</small>`)}
 
