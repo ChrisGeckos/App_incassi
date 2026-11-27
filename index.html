@@ -510,7 +510,7 @@ const chartSec=()=>`<h3>Andamento orario</h3>${chips(EM,'setEM')}${evChart(cur()
 const sumH2=()=>sumH().replace('<div class="stack">',chartSec()+'<div class="stack">');
 const totBar=l=>{const i=l.reduce((a,e)=>a+tot(e,'in'),0),o=l.reduce((a,e)=>a+tot(e,'out'),0),r=i-o,c=(t,v,k)=>`<div><small>${t}</small><b style="color:var(--${k});font-weight:${k==='gr'?800:600}">${eur(v)}</b></div>`;return `<div class="tots" style="margin:0 0 8px">${c('Totale Ricevuto',i,'yel')}${c('Totale Pagato',o,'out')}${c('Ricavo',r,r>=0?'gr':'out')}</div>`};
 const listH3=()=>listH2();
-let GV='h';
+let GV='e';
 const hr=m=>new Date(m.ts).getHours(),vmc=k=>k==='in'?'var(--yel)':k==='out'?'var(--out)':'var(--gr)';
 function lnChart(L,R,rot){const n=L.length;if(!n)return'<p class="empty" style="margin:30px 0">Seleziona almeno un evento.</p>';
 const all=R.flatMap(r=>r.v),mx=Math.max(0,...all),mn=Math.min(0,...all);
